@@ -74,6 +74,8 @@ typedef enum : NSUInteger {
 
 @property (nonatomic, assign) BOOL              voiceStart;
 
+@property (nonatomic, strong) NSTimer           *timer;
+
 @end
 
 @implementation BLEManager
@@ -579,20 +581,29 @@ typedef enum : NSUInteger {
                 if ([item containsString:@"AT+WAKEUP"]) {
                     self.wakeupStart = [NSDate new];
                     
-                    if ([self.delegate respondsToSelector:@selector(bleManagerDeviceDidWakeup:)]) {
-                        [self.delegate bleManagerDeviceDidWakeup:self];
-                    }
-                }
-                else if ([item containsString:@"AT+PSERSORFAR"] && self.wakeupStart) {
-                    NSTimeInterval interval = [[NSDate new] timeIntervalSinceDate:self.wakeupStart];
-                    if (interval > 2.0) {
-                        // 间隔超过2秒，才会被当做是手势唤醒
+                    self.timer = [NSTimer scheduledTimerWithTimeInterval:2.0 repeats:NO block:^(NSTimer * _Nonnull timer) {
                         if ([self.delegate respondsToSelector:@selector(bleManagerDeviceDidWakeup:)]) {
                             [self.delegate bleManagerDeviceDidWakeup:self];
                         }
+                    }];
+                    [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+                }
+                else if ([item containsString:@"AT+PSERSORFAR"] && self.wakeupStart) {
+                    if (self.timer) {
+                        [self.timer invalidate];
+                        self.timer = nil;
                     }
                     
                     self.wakeupStart = nil;
+                    
+//                    NSTimeInterval interval = [[NSDate new] timeIntervalSinceDate:self.wakeupStart];
+//                    if (interval > 2.0) {
+//                        // 间隔超过2秒，才会被当做是手势唤醒
+//                        if ([self.delegate respondsToSelector:@selector(bleManagerDeviceDidWakeup:)]) {
+//                            [self.delegate bleManagerDeviceDidWakeup:self];
+//                        }
+//                    }
+                    
                 }
             }
         }
