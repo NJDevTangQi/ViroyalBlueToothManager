@@ -584,6 +584,7 @@ typedef enum : NSUInteger {
                     self.wakeupStart = [NSDate new];
                     
                     self.timer = [NSTimer scheduledTimerWithTimeInterval:2.0 repeats:NO block:^(NSTimer * _Nonnull timer) {
+                        NSLog(@"111");
                         if (self.isCancelCountDown) {
                             if ([self.delegate respondsToSelector:@selector(bleManagerDeviceDidWakeup:)]) {
                                 [self.delegate bleManagerDeviceDidWakeup:self];
