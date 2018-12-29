@@ -75,6 +75,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) BOOL              voiceStart;
 
 @property (nonatomic, strong) NSTimer           *timer;
+@property (nonatomic, assign) BOOL              isCancelCountDown;
 
 @end
 
@@ -579,21 +580,24 @@ typedef enum : NSUInteger {
             if (!processed) {
                 // 没有处理，可能是主动上报的命令
                 if ([item containsString:@"AT+WAKEUP"]) {
+                    self.isCancelCountDown = YES;
                     self.wakeupStart = [NSDate new];
                     
                     self.timer = [NSTimer scheduledTimerWithTimeInterval:2.0 repeats:NO block:^(NSTimer * _Nonnull timer) {
-                        if ([self.delegate respondsToSelector:@selector(bleManagerDeviceDidWakeup:)]) {
-                            [self.delegate bleManagerDeviceDidWakeup:self];
+                        if (self.isCancelCountDown) {
+                            if ([self.delegate respondsToSelector:@selector(bleManagerDeviceDidWakeup:)]) {
+                                [self.delegate bleManagerDeviceDidWakeup:self];
+                            }
                         }
                     }];
                     [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
                 }
                 else if ([item containsString:@"AT+PSERSORFAR"] && self.wakeupStart) {
-                    if (self.timer) {
+                    if (self.timer || [self.timer isValid]) {
                         [self.timer invalidate];
                         self.timer = nil;
                     }
-                    
+                    self.isCancelCountDown = NO;
                     self.wakeupStart = nil;
                     
 //                    NSTimeInterval interval = [[NSDate new] timeIntervalSinceDate:self.wakeupStart];
