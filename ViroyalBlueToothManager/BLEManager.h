@@ -56,7 +56,7 @@ typedef void (^CommonBlock)(BOOL success, NSDictionary * _Nullable info);
 
 @property (nonatomic, readonly) NSString            *deviceName;        // BLE 设备名称
 @property (nonatomic, readonly) NSString            *currentRouteName;  // 为了获取蓝牙 Audio 设备名称
-@property (nonatomic, readonly) BOOL                updating;
+@property (nonatomic, assign)   BOOL                updating;
 
 + (instancetype)manager;
 

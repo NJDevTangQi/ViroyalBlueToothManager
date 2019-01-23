@@ -70,7 +70,6 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) CBCharacteristic  *dogpWriteCharacteristic;
 @property (nonatomic, copy)   BleProgressBlock  progressBlock;
 @property (nonatomic, copy)   CommonBlock       completionBlock;
-@property (nonatomic, assign) BOOL              updating;
 
 @property (nonatomic, assign) BOOL              voiceStart;
 
