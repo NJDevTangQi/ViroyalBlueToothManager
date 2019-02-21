@@ -229,6 +229,11 @@ typedef enum : NSUInteger {
     }
 }
 
+- (void)registerBtNotifyDelegate{
+    [[BtNotify sharedInstance] registerFotaDelegate:self];
+    [[BtNotify sharedInstance] registerCustomDelegate:self];
+}
+
 - (void)sendString:(NSString *)string {
     [self writeString:string
            peripheral:self.peripheral
@@ -300,9 +305,6 @@ typedef enum : NSUInteger {
         }
         return;
     }
-    
-    [[BtNotify sharedInstance] registerFotaDelegate:self];
-    [[BtNotify sharedInstance] registerCustomDelegate:self];
     
     self.progressBlock = progressBlock;
     self.completionBlock = completion;

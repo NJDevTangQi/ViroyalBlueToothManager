@@ -66,6 +66,11 @@ typedef void (^CommonBlock)(BOOL success, NSDictionary * _Nullable info);
 
 - (void)disconnectCurrentDeviceAndBlackList:(BOOL)add;
 
+
+/**
+ * 设置BtNotify代理
+ */
+- (void)registerBtNotifyDelegate;
 /*
  * 向蓝牙设备发送指令，所有的指令会按照先后顺序，逐条发送，指令处理完成后，会调用 completion
  @param string 指令内容，非空
