@@ -309,17 +309,24 @@ typedef enum : NSUInteger {
     self.progressBlock = progressBlock;
     self.completionBlock = completion;
     
-    __block NSData *data;
-    dispatch_queue_t queue = dispatch_queue_create("downDataWithUrl", DISPATCH_QUEUE_SERIAL);
-    dispatch_async(queue, ^{
-        data = [NSData dataWithContentsOfURL:fileUrl];
-        if (data.length == 0) {
-            if (completion) {
-                completion(NO, @{@"msg": @"文件错误"});
+//    __block NSData *data;
+//    dispatch_queue_t queue = dispatch_queue_create("downDataWithUrl", DISPATCH_QUEUE_SERIAL);
+//    dispatch_async(queue, ^{
+//        data = [NSData dataWithContentsOfURL:fileUrl];
+//        if (data.length == 0) {
+//            if (completion) {
+//                completion(NO, @{@"msg": @"文件错误"});
+//            }
+//            return;
+//        }
+//    });
+    data = [NSData dataWithContentsOfURL:fileUrl];
+            if (data.length == 0) {
+                if (completion) {
+                    completion(NO, @{@"msg": @"文件错误"});
+                }
+                return;
             }
-            return;
-        }
-    });
     
     [[BtNotify sharedInstance] sendFotaData:FBIN_FOTA_UPDATE firmwareData:data];
     self.updating = YES;
