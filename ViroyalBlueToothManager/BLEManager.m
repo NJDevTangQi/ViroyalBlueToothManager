@@ -320,7 +320,7 @@ typedef enum : NSUInteger {
 //            return;
 //        }
 //    });
-    data = [NSData dataWithContentsOfURL:fileUrl];
+    NSData *data = [NSData dataWithContentsOfURL:fileUrl];
             if (data.length == 0) {
                 if (completion) {
                     completion(NO, @{@"msg": @"文件错误"});
