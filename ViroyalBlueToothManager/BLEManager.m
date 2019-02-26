@@ -309,7 +309,7 @@ typedef enum : NSUInteger {
     self.progressBlock = progressBlock;
     self.completionBlock = completion;
     
-    NSData *data;
+    __block NSData *data;
     dispatch_queue_t queue = dispatch_queue_create("downDataWithUrl", DISPATCH_QUEUE_SERIAL);
     dispatch_async(queue, ^{
         data = [NSData dataWithContentsOfURL:fileUrl];
